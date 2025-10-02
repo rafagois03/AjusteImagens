@@ -114,11 +114,11 @@ def convert_pdf_to_images(file, output_folder):
 # ===========================
 # Interface Streamlit
 # ===========================
-st.title("📄 Processador de Imagens e PDFs")
+st.title("📄 Processador de Imagens e PDFs - Projeto IA Canhotos GenMills")
 
 uploaded_files = st.file_uploader(
-    "Carregue imagens ou PDFs",
-    type=["jpg", "jpeg", "png", "tif", "tiff", "pdf"],
+    "Carregue imagens ou PDFs de canhotos que deseja processar com a IA",
+    type=["jpg", "jpeg", "png", "pdf"],
     accept_multiple_files=True
 )
 
