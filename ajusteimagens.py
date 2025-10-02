@@ -5,6 +5,9 @@ import numpy as np
 import cv2
 import streamlit as st
 from PIL import Image, ImageEnhance
+import zipfile
+from io import BytesIO  # 👈 faltava importar
+
 
 # Tenta importar PyMuPDF (fitz)
 try:
@@ -131,21 +134,21 @@ if uploaded_files:
                     path, img = process_image(open(img_path, "rb"), tmpdir)
                     if img:
                         processed_paths.append(path)
-                        st.image(img, caption=f"Processado: {os.path.basename(path)}")
             else:
                 st.info(f"Processando imagem: {file.name}")
                 path, img = process_image(file, tmpdir)
                 if img:
                     processed_paths.append(path)
-                    st.image(img, caption=f"Processado: {file.name}")
 
-        # 👉 Compactar todos os arquivos em ZIP
+        # 👉 Compactar todos os arquivos processados em um único ZIP
         if processed_paths:
             zip_buffer = BytesIO()
             with zipfile.ZipFile(zip_buffer, "w") as zipf:
                 for p in processed_paths:
                     zipf.write(p, arcname=os.path.basename(p))
             zip_buffer.seek(0)
+
+            st.success(f"✅ {len(processed_paths)} arquivos processados com sucesso!")
 
             st.download_button(
                 label="⬇️ Baixar todas as imagens (ZIP)",
