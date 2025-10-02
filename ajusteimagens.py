@@ -121,6 +121,8 @@ uploaded_files = st.file_uploader(
 
 if uploaded_files:
     with tempfile.TemporaryDirectory() as tmpdir:
+        processed_paths = []
+
         for file in uploaded_files:
             if file.name.lower().endswith(".pdf"):
                 st.info(f"Convertendo PDF: {file.name}")
@@ -128,23 +130,26 @@ if uploaded_files:
                 for img_path in imgs:
                     path, img = process_image(open(img_path, "rb"), tmpdir)
                     if img:
+                        processed_paths.append(path)
                         st.image(img, caption=f"Processado: {os.path.basename(path)}")
-                        with open(path, "rb") as f:
-                            st.download_button(
-                                label="⬇️ Baixar imagem",
-                                data=f,
-                                file_name=os.path.basename(path),
-                                mime="image/png"
-                            )
             else:
                 st.info(f"Processando imagem: {file.name}")
                 path, img = process_image(file, tmpdir)
                 if img:
+                    processed_paths.append(path)
                     st.image(img, caption=f"Processado: {file.name}")
-                    with open(path, "rb") as f:
-                        st.download_button(
-                            label="⬇️ Baixar imagem",
-                            data=f,
-                            file_name=os.path.basename(path),
-                            mime="image/png"
-                        )
+
+        # 👉 Compactar todos os arquivos em ZIP
+        if processed_paths:
+            zip_buffer = BytesIO()
+            with zipfile.ZipFile(zip_buffer, "w") as zipf:
+                for p in processed_paths:
+                    zipf.write(p, arcname=os.path.basename(p))
+            zip_buffer.seek(0)
+
+            st.download_button(
+                label="⬇️ Baixar todas as imagens (ZIP)",
+                data=zip_buffer,
+                file_name="imagens_processadas.zip",
+                mime="application/zip"
+            )
