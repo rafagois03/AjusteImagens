@@ -6,7 +6,7 @@ import cv2
 import streamlit as st
 from PIL import Image, ImageEnhance
 import zipfile
-from io import BytesIO  # 👈 faltava importar
+from io import BytesIO
 
 
 # Tenta importar PyMuPDF (fitz)
@@ -148,7 +148,7 @@ if uploaded_files:
                     zipf.write(p, arcname=os.path.basename(p))
             zip_buffer.seek(0)
 
-            st.success(f"✅ {len(processed_paths)} arquivos processados com sucesso!")
+            st.success(f"✅ {len(processed_paths)} arquivos processados com sucesso! Faça o download, salve na pasta do OneDrive e acione a IA pelo Teams")
 
             st.download_button(
                 label="⬇️ Baixar todas as imagens (ZIP)",
