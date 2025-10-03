@@ -70,22 +70,6 @@ def deskew_image(pil_img):
         return pil_img
 
 
-def enhance_contrast_safely(img):
-    try:
-        if img.mode in ("L", "RGB"):
-            return ImageEnhance.Contrast(img).enhance(2.0)
-        elif img.mode == "RGBA":
-            r, g, b, a = img.split()
-            rgb = Image.merge("RGB", (r, g, b))
-            rgb_enhanced = ImageEnhance.Contrast(rgb).enhance(2.0)
-            r2, g2, b2 = rgb_enhanced.split()
-            return Image.merge("RGBA", (r2, g2, b2, a))
-        else:
-            rgb = img.convert("RGB")
-            return ImageEnhance.Contrast(rgb).enhance(2.0)
-    except:
-        return img
-
 
 def process_image(file, output_folder):
     try:
