@@ -75,8 +75,6 @@ def process_image(file, output_folder):
     try:
         with Image.open(file) as img:
             img = img.copy()
-            img = deskew_image(img)
-            img = enhance_contrast_safely(img)
 
             # Garante tamanho mínimo
             w, h = img.size
